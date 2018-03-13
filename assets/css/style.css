@@ -1,0 +1,2 @@
+/* Gets rid of dumb blue border for chrome */
+button:focus {outline:0;}
