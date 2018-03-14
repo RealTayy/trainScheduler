@@ -1,12 +1,3 @@
-var db = firebase.database();
-
-db.ref().on("value", function (snapshot) {
-    data = snapshot.val();
-    console.log(snapshot.val());
-}, function (err) {
-    console.log('This the error: ' + err.code);
-})
-
 var editDatabase = {
     addTrain(name, destination, startTime, frequency) {
         db.ref().push({
@@ -23,7 +14,7 @@ var editDatabase = {
 
     updateTrain(trainID, name, destination, startTime, frequency) {
         db.ref(trainID).set({
-            'name': trainName,
+            'name': name,
             'destination': destination,
             'startTime': startTime,
             'frequency': frequency
@@ -42,6 +33,58 @@ var editDatabase = {
         })
     }
 }
+
+var displayTrains = {
+    displayMain(trainDatabase) {        
+        $("#train-table").find('tbody').remove();
+        for (var key in trainDatabase) {
+            data = trainDatabase[key];
+            var newTbody = $('<tbody>');
+            var newTr = $('<tr>').attr({ id: key, 'data-id': key });
+            var nameTh = $('<th>').attr({ scope: 'row', class: 'name' }).text(data.name);
+            var destinationTh = $('<th>').attr({ class: 'destination' }).text(data.destination);
+            var frequencyTh = $('<th>').attr({ class: 'frequency' }).text(data.frequency);
+
+            // TO DO: REPLACE "12:00PM" WITH A METHOD THAT RETURNS NEXT ARRIVAL!
+            var arrivalTh = $('<th>').attr({ class: 'arrival' }).text('12:00PM');
+
+            // TO DO: REPLACE "5" WITH A WAY TO METHOD THAT RETURNS MINUTES AWAY!
+            var minutesawayTh = $('<th>').attr({ class: 'minutes-away' }).text(5);
+
+            // These lines create the two buttons under "Actions"
+            var actionTh = $('<th>').attr({ scope: 'col' })
+            var editSpan = $('<span>').attr({ class: 'action edit' });
+            var editIcon = $('<i>').attr({ class: 'fas fa-edit' });
+            var deleteSpan = $('<span>').attr({ class: 'action delete' });
+            var deleteIcon = $('<i>').attr({ class: 'fas fa-times-circle' });
+            actionTh.append(editSpan.append(editIcon), deleteSpan.append(deleteIcon));
+
+            newTr.append(nameTh, destinationTh, frequencyTh, arrivalTh, minutesawayTh, actionTh);
+            newTbody.append(newTr);
+            $('#train-table').append(newTbody);
+        }
+    }
+}
+
+var db = firebase.database();
+
+// Does this on page load and when a new train is added
+db.ref().on('value', function (snapshot) {
+    console.log("hi")
+    data = snapshot.val();
+    displayTrains.displayMain(data);
+}, function (err) {
+    console.log('This the error: ' + err.code);
+})
+
+// Does this when a child is edited
+db.ref().on('child_changed', function (snapshot) {
+    console.log("hehe")
+    data = snapshot.val();
+    console.log(data);
+}, function (err) {
+    console.log('This the error: ' + err.code);
+})
 
 // Adds click listener for Submit Button
 $('#submit').on('click', function () {
@@ -67,7 +110,6 @@ $('#submit').on('click', function () {
 
     editDatabase.throwAlert('success', name + " added to the database!")
     editDatabase.addTrain(name, destination, startTime, frequency);
-
 });
 
 // Adds event for edit button
