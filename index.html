@@ -53,26 +53,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr id="-L7jSQx0Un9rjdMn81-">
+                    <tr id="-L7YShKLObDF7G5Nb_xb" data-id="-L7YShKLObDF7G5Nb_xb">
                         <th scope="row" class='name'>I'm a Train</th>
                         <td class="destination">I go here</td>
                         <td class="frequency">How fast?</td>
                         <td class="arrival">Time I get here</td>
                         <td class="minutes-away">Minutes till me</td>
                         <th scope="col">
-                            <i class="fas fa-edit"></i>
-                            <i class="fas fa-times-circle"></i>
-                        </th>
-                    </tr>
-                    <tr id="-L7WjSQx0Un9rdMn81-">
-                        <th scope="row" class='name'>I'm a Train</th>
-                        <td class="destination">I go here</td>
-                        <td class="frequency">How fast?</td>
-                        <td class="arrival">Time I get here</td>
-                        <td class="minutes-away">Minutes till me</td>
-                        <th scope="col">
-                            <i class="fas fa-edit"></i>
-                            <i class="fas fa-times-circle"></i>
+                            <span class="action edit"><i class="fas fa-edit"></i></span>                            
+                            <span class="action delete"><i class="fas fa-times-circle"></i></span>
                         </th>
                     </tr>
                 </tbody>
@@ -81,7 +70,7 @@
         <div class="row">
             <div class="col-6">
                 <div id="train-form" class="left-wrapper">
-                    <div class="cointainer-header"> Next 5 Trains</div>
+                    <div class="cointainer-header"> Add new train</div>
                     <form>
                         <div class="form-group">
                             <label for="nameInput">Train Name</label>
@@ -92,18 +81,22 @@
                             <input type="text" class="form-control" id="destination">
                         </div>
                         <div class="form-row">
-
-
                             <div class="form-group col-6">
                                 <label for="time">Start Time</label>
-                                <input type="time" class="form-control" id="hours">
+                                <input id="start-time" type="time" class="form-control" value="12:00">
                             </div>
                             <div class="form-group col-6">
                                 <label for="destination">Frequency (Minutes)</label>
-                                <input type="number" class="form-control" id="destination">
+                                <input type="number" class="form-control" id="frequency">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary">Submit</button>
+                        <div class="row">
+                            <button id="submit" type="button" class="btn btn-primary col-2">Submit</button>                            
+                            <div class="col-10">
+                                <div id="alert-message" class="alert alert-primary" role="alert">
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -126,20 +119,12 @@
                                 <td class="arrival">Time I get here</td>
                                 <td class="minutes-away">Minutes till me</td>
                             </tr>
-                            <tr id="-L7WjSQx0Un9rjdMn8-">
-                                <th scope="row" class='name'>I'm a Train</th>
-                                <td class="destination">I go here</td>
-                                <td class="arrival">Time I get here</td>
-                                <td class="minutes-away">Minutes till me</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
-
 
     <!-- Load moment.js -->
     <script type="text/javascript" src="./assets/javascript/moment.js"></script>

@@ -10,12 +10,11 @@ button:focus {outline:0;}
 }
 
 .left-wrapper {
-    margin-right: 6px;
-    /* padding: 12px; */
+    margin-right: 6px;    
 }
 
 .fa-edit {
-    margin-right: 1em;    
+    /* margin-right: 1em;     */        
 }
 
 .col-6 {
@@ -40,4 +39,26 @@ button:focus {outline:0;}
 
 form {
     padding: 12px;
+}
+
+form .row {
+    padding: 0 14px;
+}
+
+.alert {
+    padding: .375rem .75rem;
+    margin: 0;
+}
+
+form .col-10 {
+    padding-left: 12px;
+    padding-right: 0;
+}
+
+#alert-message {
+    opacity: 0;
+}
+
+.action:hover {
+    cursor: pointer;    
 }
