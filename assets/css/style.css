@@ -13,8 +13,16 @@ button:focus {outline:0;}
     margin-right: 6px;    
 }
 
-.fa-edit {
-    /* margin-right: 1em;     */        
+.edit {
+    margin-right: 1em;
+}
+
+thead {
+    font-weight: 700;
+}
+
+th .btn {
+    padding: 3px 6px;
 }
 
 .col-6 {
@@ -27,17 +35,20 @@ button:focus {outline:0;}
     
     color: white;
     background-color: #007BFF;
-    border-top-left-radius: .4em;
-    border-top-right-radius: .4em;
+    border-top-left-radius: .35em;
+    border-top-right-radius: .35em;
+
+    font-size: 1.2em;
+    font-weight: 700;
 }
 
-#schedule, #train-form, #next-five {
+#schedule, #add-train, #next-five {
     border: 3px solid #333;
     border-radius: .6em;
     margin-bottom: 12px;    
 }
 
-form {
+#train-form {
     padding: 12px;
 }
 
@@ -48,6 +59,7 @@ form .row {
 .alert {
     padding: .375rem .75rem;
     margin: 0;
+    /* opacity: 0; */
 }
 
 form .col-10 {
@@ -55,8 +67,12 @@ form .col-10 {
     padding-right: 0;
 }
 
-#alert-message {
+#alert-message, #edit-alert {
     opacity: 0;
+}
+
+#edit-alert {
+    opacity: 1;
 }
 
 .action:hover {
