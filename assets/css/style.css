@@ -1,2 +1,43 @@
 /* Gets rid of dumb blue border for chrome */
 button:focus {outline:0;}
+
+#content-wrapper {
+    margin: 50px;
+}
+
+.right-wrapper {
+    margin-left: 6px;
+}
+
+.left-wrapper {
+    margin-right: 6px;
+    /* padding: 12px; */
+}
+
+.fa-edit {
+    margin-right: 1em;    
+}
+
+.col-6 {
+    padding: 0px;
+}
+
+.cointainer-header {
+    padding: 12px;
+    width: 100%;
+    
+    color: white;
+    background-color: #007BFF;
+    border-top-left-radius: .4em;
+    border-top-right-radius: .4em;
+}
+
+#schedule, #train-form, #next-five {
+    border: 3px solid #333;
+    border-radius: .6em;
+    margin-bottom: 12px;    
+}
+
+form {
+    padding: 12px;
+}

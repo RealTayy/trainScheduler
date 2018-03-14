@@ -7,7 +7,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>EZ Giphy</title>
+        <title>Train Schedule</title>
 
         <!-- <link rel="icon" href="./assets/images/favicon.ico" /> -->
 
@@ -18,27 +18,129 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
             crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script> -->
-
-
-        <!-- Load style.css -->
-        <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+            crossorigin="anonymous"></script>
 
         <!-- Load hover effects -->
         <link rel="stylesheet" type="text/css" href="./assets/css/hover.css">
 
         <!-- Load Font from Google Fonts -->
-        <!-- <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> -->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
         <!-- Load fontAwesome sick fonts icons and stuff WOW SO COOL WOWZA! -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+
+        <!-- Load style.css -->
+        <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
     </head>
 </head>
 
 <body>
+    <div id="content-wrapper">
+        <div id="schedule" class="row">
+            <div class="cointainer-header"> List of Trains</div>
+            <table id='train-table' class="col-12 table table-light">
+                <thead>
+                    <tr>
+                        <th scope="col">Train Name</th>
+                        <th scope="col">Destination</th>
+                        <th scope="col">Frequency</th>
+                        <th scope="col">Next Arrival</th>
+                        <th scope="col">Minutes Away</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="-L7jSQx0Un9rjdMn81-">
+                        <th scope="row" class='name'>I'm a Train</th>
+                        <td class="destination">I go here</td>
+                        <td class="frequency">How fast?</td>
+                        <td class="arrival">Time I get here</td>
+                        <td class="minutes-away">Minutes till me</td>
+                        <th scope="col">
+                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-times-circle"></i>
+                        </th>
+                    </tr>
+                    <tr id="-L7WjSQx0Un9rdMn81-">
+                        <th scope="row" class='name'>I'm a Train</th>
+                        <td class="destination">I go here</td>
+                        <td class="frequency">How fast?</td>
+                        <td class="arrival">Time I get here</td>
+                        <td class="minutes-away">Minutes till me</td>
+                        <th scope="col">
+                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-times-circle"></i>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div id="train-form" class="left-wrapper">
+                    <div class="cointainer-header"> Next 5 Trains</div>
+                    <form>
+                        <div class="form-group">
+                            <label for="nameInput">Train Name</label>
+                            <input type="text" class="form-control" id="nameInput">
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">Destination</label>
+                            <input type="text" class="form-control" id="destination">
+                        </div>
+                        <div class="form-row">
+
+
+                            <div class="form-group col-6">
+                                <label for="time">Start Time</label>
+                                <input type="time" class="form-control" id="hours">
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="destination">Frequency (Minutes)</label>
+                                <input type="number" class="form-control" id="destination">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-6">
+                <div id="next-five" class="right-wrapper">
+                    <div class="cointainer-header"> Next 5 Trains</div>
+                    <table id='train-table' class="table table-light">
+                        <thead>
+                            <tr>
+                                <th scope="col">Train Name</th>
+                                <th scope="col">Destination</th>
+                                <th scope="col">Next Arrival</th>
+                                <th scope="col">Minutes Away</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="-L7WjSQx0Un9rjdn81-">
+                                <th scope="row" class='name'>I'm a Train</th>
+                                <td class="destination">I go here</td>
+                                <td class="arrival">Time I get here</td>
+                                <td class="minutes-away">Minutes till me</td>
+                            </tr>
+                            <tr id="-L7WjSQx0Un9rjdMn8-">
+                                <th scope="row" class='name'>I'm a Train</th>
+                                <td class="destination">I go here</td>
+                                <td class="arrival">Time I get here</td>
+                                <td class="minutes-away">Minutes till me</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- Load moment.js -->
     <script type="text/javascript" src="./assets/javascript/moment.js"></script>
 

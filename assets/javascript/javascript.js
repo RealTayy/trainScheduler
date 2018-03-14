@@ -1,17 +1,31 @@
-var db = firebase.database().ref();
+var db = firebase.database();
 
-db.set({
-    test: {
-        name: 'hi',
-        other: 222
-    }
-})
-
-db.on("value", function (snapshot) {
+db.ref().on("value", function (snapshot) {
     data = snapshot.val();
-    console.log(snapshot.child('test').val());
+    console.log(snapshot.val());
 }, function (err) {
     console.log('This the error: ' + err.code);
 })
 
-function addTrain()
+var editDatabase = {
+    addTrain() {
+        db.ref().push({
+            'name': trainName,
+            'destination': destination,
+            'frequency': frequency,
+            'startTime': startTime
+        });
+    },
+
+    deleteTrain(trainID) {
+        db.ref(trainID).remove();
+    },
+
+    updateTrain(trainID, trainName, destination, frequency) {
+        db.ref(trainID).set({
+            'name': trainName,
+            'destination': destination,
+            'frequency': frequency
+        })
+    }
+}
