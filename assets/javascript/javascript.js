@@ -1,10 +1,11 @@
 var editDatabase = {
-    addTrain(name, destination, startTime, frequency) {
+    addTrain(name, destination, startTime, startDate, frequency) {
         db.ref().push({
             'name': name,
             'destination': destination,
             'startTime': startTime,
-            'frequency': frequency,
+            'startDate': startDate,
+            'frequency': frequency
         });
     },
 
@@ -12,11 +13,12 @@ var editDatabase = {
         db.ref(key).remove();
     },
 
-    editTrain(key, name, destination, startTime, frequency) {
+    editTrain(key, name, destination, startTime, startDate, frequency) {
         db.ref(key).set({
             'name': name,
             'destination': destination,
             'startTime': startTime,
+            'startDate': startDate,
             'frequency': frequency
         })
     },
@@ -83,10 +85,12 @@ var schedule = {
 
     },
 
-    getMinsAway(trainData) {
-        var startTime = moment(trainData.startTime, 'HH:mm');
+    getMinsAway(trainData) {        
+        var startMoment = moment(trainData.startDate + trainData.startTime, 'YYYY-MM-DDHH:mm');
         var freq = trainData.frequency;
-        var minutesAway = Math.floor(((startTime - moment()) / 60000) % freq);
+        var minutesDifference = moment.duration(moment().diff(startMoment)).asMinutes();
+        var minutesAway = Math.ceil(freq - (minutesDifference % freq))
+
         return minutesAway;
     },
 
@@ -101,18 +105,8 @@ var db = firebase.database();
 
 // Does this on page load and when a new train is added
 db.ref().on('value', function (snapshot) {
-    console.log("hi")
     data = snapshot.val();
     schedule.displayMain(data);
-}, function (err) {
-    console.log('This the error: ' + err.code);
-});
-
-// Does this when a child is edited. Do I even need this?
-db.ref().on('child_changed', function (snapshot) {
-    console.log("hehe")
-    data = snapshot.val();
-    console.log(data);
 }, function (err) {
     console.log('This the error: ' + err.code);
 });
@@ -122,25 +116,34 @@ $('#submit').on('click', function () {
     var name = $('#name-input').val();
     var destination = $('#destination').val();
     var startTime = $('#start-time').val();
-    var frequency = $('#frequency').val();
+    var startDate = $('#start-date').val();
+    var startMoment = moment(startDate + startTime,'YYYY-MM-DDHH:mm');
+    var frequency = $('#frequency').val();    
+    
 
     if (name === '') {
-        editDatabase.throwMainAlert('danger', 'Please enter a valid name');
+        editDatabase.throwMainAlert('danger', 'Please enter a name');
         return;
     }
 
     if (destination === '') {
-        editDatabase.throwMainAlert('danger', 'Please enter a valid destination');
+        editDatabase.throwMainAlert('danger', 'Please enter a destination');
         return;
     }
 
     if (frequency === '') {
-        editDatabase.throwMainAlert('danger', 'Please enter a valid frequency');
+        editDatabase.throwMainAlert('danger', 'Please enter a frequency');
+        return;
+    }
+
+    // Checks if date entered is greater then the current date    
+    if (moment() - startMoment < 0) {
+        editDatabase.throwMainAlert('danger', 'Date/Time invalid -- Train can\'t be from the future');
         return;
     }
 
     editDatabase.throwMainAlert('success', name + " successfully added!")
-    editDatabase.addTrain(name, destination, startTime, frequency);
+    editDatabase.addTrain(name, destination, startTime, startDate, frequency);
 
 });
 
@@ -163,6 +166,7 @@ $(document).on('click', '.edit', function () {
         $('#edit-name-input').val(data.name);
         $('#edit-destination').val(data.destination);
         $('#edit-start-time').val(data.startTime);
+        $('#edit-start-date').val(data.startDate);
         $('#edit-frequency').val(data.frequency);
     })
 });
@@ -173,6 +177,8 @@ $('#save-edit').on('click', function () {
     var name = $('#edit-name-input').val();
     var destination = $('#edit-destination').val();
     var startTime = $('#edit-start-time').val();
+    var startDate = $('#edit-start-date').val();
+    var startMoment = moment(startDate + startTime,'YYYY-MM-DDHH:mm');
     var frequency = $('#edit-frequency').val();
 
     if (name === '') {
@@ -190,7 +196,12 @@ $('#save-edit').on('click', function () {
         return;
     }
 
+    if (moment() - startMoment < 0) {
+        editDatabase.throwEditAlert('danger', 'Date/Time invalid -- Train can\'t be from the future');
+        return;
+    }
+
     editDatabase.throwEditAlert('success', name + " edited!")
-    editDatabase.editTrain(key, name, destination, startTime, frequency);
+    editDatabase.editTrain(key, name, destination, startTime, startDate, frequency);
     $('#editModalTitle').text('Editing: ' + name);
 });
