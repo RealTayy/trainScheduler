@@ -60,7 +60,7 @@ var schedule = {
             var newTr = $('<tr>').attr({ id: key, 'data-id': key });
             var nameTh = $('<th>').attr({ scope: 'row', class: 'name' }).text(data.name);
             var destinationTh = $('<th>').attr({ class: 'destination' }).text(data.destination);
-            var frequencyTh = $('<th>').attr({ class: 'frequency' }).text(data.frequency);            
+            var frequencyTh = $('<th>').attr({ class: 'frequency' }).text(data.frequency);
             var arrivalTh = $('<th>').attr({ class: 'arrival' }).text(schedule.getArrival(data));
             var minutesawayTh = $('<th>').attr({ class: 'minutes-away' }).text(schedule.getMinsAway(data));
 
@@ -82,10 +82,10 @@ var schedule = {
     },
 
     displayFive() {
-
+        // To do...
     },
 
-    getMinsAway(trainData) {        
+    getMinsAway(trainData) {
         var startMoment = moment(trainData.startDate + trainData.startTime, 'YYYY-MM-DDHH:mm');
         var freq = trainData.frequency;
         var minutesDifference = moment.duration(moment().diff(startMoment)).asMinutes();
@@ -103,7 +103,7 @@ var schedule = {
 
 var db = firebase.database();
 
-// Does this on page load and when a new train is added
+// Does this on page load and when a new train is added/edited
 db.ref().on('value', function (snapshot) {
     data = snapshot.val();
     schedule.displayMain(data);
@@ -113,13 +113,13 @@ db.ref().on('value', function (snapshot) {
 
 // Adds click event for Submit Button
 $('#submit').on('click', function () {
-    var name = $('#name-input').val();
-    var destination = $('#destination').val();
-    var startTime = $('#start-time').val();
-    var startDate = $('#start-date').val();
-    var startMoment = moment(startDate + startTime,'YYYY-MM-DDHH:mm');
-    var frequency = $('#frequency').val();    
-    
+    var name = $('#name-input').val().trim();
+    var destination = $('#destination').val().trim();
+    var startTime = $('#start-time').val().trim();
+    var startDate = $('#start-date').val().trim();
+    var startMoment = moment(startDate + startTime, 'YYYY-MM-DDHH:mm');
+    var frequency = $('#frequency').val().trim();
+
 
     if (name === '') {
         editDatabase.throwMainAlert('danger', 'Please enter a name');
@@ -136,15 +136,25 @@ $('#submit').on('click', function () {
         return;
     }
 
+    if (!/\d\d:\d\d/.test(startTime)) {
+        editDatabase.throwMainAlert('danger', 'Please enter a start time');
+        return;
+    }
+
+    if (startDate === '') {
+        editDatabase.throwMainAlert('danger', 'Please enter a start date');
+        return;
+    }
+
     // Checks if date entered is greater then the current date    
     if (moment() - startMoment < 0) {
         editDatabase.throwMainAlert('danger', 'Date/Time invalid -- Train can\'t be from the future');
         return;
     }
 
+    // Run this if all fields filled out correctly
     editDatabase.throwMainAlert('success', name + " successfully added!")
     editDatabase.addTrain(name, destination, startTime, startDate, frequency);
-
 });
 
 // Adds click event for delete button
@@ -173,13 +183,13 @@ $(document).on('click', '.edit', function () {
 
 // Add click event for save button in the edit window
 $('#save-edit').on('click', function () {
-    var key = $('#editModalTitle').attr('key');
-    var name = $('#edit-name-input').val();
-    var destination = $('#edit-destination').val();
-    var startTime = $('#edit-start-time').val();
-    var startDate = $('#edit-start-date').val();
-    var startMoment = moment(startDate + startTime,'YYYY-MM-DDHH:mm');
-    var frequency = $('#edit-frequency').val();
+    var key = $('#editModalTitle').attr('key').trim();
+    var name = $('#edit-name-input').val().trim();
+    var destination = $('#edit-destination').val().trim();
+    var startTime = $('#edit-start-time').val().trim();
+    var startDate = $('#edit-start-date').val().trim();
+    var startMoment = moment(startDate + startTime, 'YYYY-MM-DDHH:mm');
+    var frequency = $('#edit-frequency').val().trim();
 
     if (name === '') {
         editDatabase.throwEditAlert('danger', 'Please enter a valid name');
@@ -201,7 +211,25 @@ $('#save-edit').on('click', function () {
         return;
     }
 
+    if (!/\d\d:\d\d/.test(startTime)) {
+        editDatabase.throwEditAlert('danger', 'Please enter a start time');
+        return;
+    }
+
+    if (startDate === '') {
+        editDatabase.throwEditAlert('danger', 'Please enter a start date');
+        return;
+    }
+
+    // Run this if all fields filled out correctly
     editDatabase.throwEditAlert('success', name + " edited!")
     editDatabase.editTrain(key, name, destination, startTime, startDate, frequency);
     $('#editModalTitle').text('Editing: ' + name);
 });
+
+function addFive(key) {
+    db.ref(key).once("value", function (snapshot) {
+        console.log(key);
+        console.log(snapshot.val());
+    })
+}
