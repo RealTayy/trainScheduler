@@ -12,7 +12,7 @@ var editDatabase = {
         db.ref(key).remove();
     },
 
-    updateTrain(key, name, destination, startTime, frequency) {
+    editTrain(key, name, destination, startTime, frequency) {
         db.ref(key).set({
             'name': name,
             'destination': destination,
@@ -46,24 +46,23 @@ var editDatabase = {
     }
 }
 
-var displayTrains = {
+var schedule = {
+    // This function displays list of trains in the main windows
     displayMain(trainDatabase) {
         $("#train-table").find('tbody').remove();
         for (var key in trainDatabase) {
             data = trainDatabase[key];
+
+            // Create and build a new <tbody> to append to list of trains...
             var newTbody = $('<tbody>');
             var newTr = $('<tr>').attr({ id: key, 'data-id': key });
             var nameTh = $('<th>').attr({ scope: 'row', class: 'name' }).text(data.name);
             var destinationTh = $('<th>').attr({ class: 'destination' }).text(data.destination);
-            var frequencyTh = $('<th>').attr({ class: 'frequency' }).text(data.frequency);
+            var frequencyTh = $('<th>').attr({ class: 'frequency' }).text(data.frequency);            
+            var arrivalTh = $('<th>').attr({ class: 'arrival' }).text(schedule.getArrival(data));
+            var minutesawayTh = $('<th>').attr({ class: 'minutes-away' }).text(schedule.getMinsAway(data));
 
-            // TO DO: REPLACE "12:00PM" WITH A METHOD THAT RETURNS NEXT ARRIVAL!
-            var arrivalTh = $('<th>').attr({ class: 'arrival' }).text('12:00PM');
-
-            // TO DO: REPLACE "5" WITH A WAY TO METHOD THAT RETURNS MINUTES AWAY!
-            var minutesawayTh = $('<th>').attr({ class: 'minutes-away' }).text(5);
-
-            // These lines create the two buttons under "Actions"
+            // These lines create the two buttons under "Actions" that will also be appended to <tbody>
             var actionTh = $('<th>').attr({ class: 'action-group', scope: 'col' })
             var editSpan = $('<button>').attr({
                 type: 'button', class: 'btn btn-success action edit',
@@ -78,6 +77,23 @@ var displayTrains = {
             newTbody.append(newTr);
             $('#train-table').append(newTbody);
         }
+    },
+
+    displayFive() {
+
+    },
+
+    getMinsAway(trainData) {
+        var startTime = moment(trainData.startTime, 'HH:mm');
+        var freq = trainData.frequency;
+        var minutesAway = Math.floor(((startTime - moment()) / 60000) % freq);
+        return minutesAway;
+    },
+
+    getArrival(trainData) {
+        var minutesAway = schedule.getMinsAway(trainData);
+        var nextArrival = moment().add(minutesAway, 'minutes');
+        return nextArrival.format('hh:mmA');
     }
 }
 
@@ -87,7 +103,7 @@ var db = firebase.database();
 db.ref().on('value', function (snapshot) {
     console.log("hi")
     data = snapshot.val();
-    displayTrains.displayMain(data);
+    schedule.displayMain(data);
 }, function (err) {
     console.log('This the error: ' + err.code);
 });
@@ -138,6 +154,8 @@ $(document).on('click', '.delete', function () {
 $(document).on('click', '.edit', function () {
     key = $(this).parent().parent().data('id');
     $('#edit-alert').css({ opacity: 0 });
+
+    //Pre fills form with info of train whose edit button you clicked
     db.ref(key).once("value", function (snapshot) {
         var data = snapshot.val();
         $('#editModalTitle').text('Editing: ' + data.name);
@@ -173,6 +191,6 @@ $('#save-edit').on('click', function () {
     }
 
     editDatabase.throwEditAlert('success', name + " edited!")
-    editDatabase.updateTrain(key, name, destination, startTime, frequency);
+    editDatabase.editTrain(key, name, destination, startTime, frequency);
     $('#editModalTitle').text('Editing: ' + name);
 });
